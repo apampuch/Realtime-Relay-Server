@@ -77,10 +77,11 @@ ffmpeg \
   -c:v libx264 \
   -preset slow \
   -b:v 10M \
-  -bufsize 2M \
+  -bufsize 5M \
+  -maxrate 10M \
   -pix_fmt yuv420p \
   -level 4.1 \
-  -x264-params "bframes=0:keyint=24" \
+  -x264-params "bframes=0:keyint=24:nal-hrd=cbr:force-cfr=1" \
   -c:a libopus \
   -b:a 96k \
   -ac 2 \

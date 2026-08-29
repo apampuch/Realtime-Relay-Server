@@ -106,6 +106,9 @@ int setup_pipeline(StreamComponents *components, char *filename) {
     g_clear_object(&components->pipeline);
     memset(components, 0, sizeof(*components));
 
+    // TODO choose the demux and video parser based on the file
+    // e.g. go with av1parse or mkvdemux
+
     // build the source, sink, filters
     components->source          = gst_element_factory_make("filesrc", "source");
     components->demux           = gst_element_factory_make("qtdemux", "demux");
