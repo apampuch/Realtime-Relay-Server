@@ -3,6 +3,7 @@
 #include "gst/gstpipeline.h"
 #include "gst/gstutils.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "stream_components.h"
 
@@ -101,6 +102,20 @@ static gboolean bus_callback(GstBus *bus, GstMessage *msg, gpointer data) {
     return TRUE;
 }
 
+static void check_components(StreamComponents *components) {
+    if (!components->pipeline)       { g_printerr("Failed to create component: pipeline\n");       exit(EXIT_FAILURE); }
+    if (!components->source)         { g_printerr("Failed to create component: source\n");         exit(EXIT_FAILURE); }
+    if (!components->demux)          { g_printerr("Failed to create component: demux\n");          exit(EXIT_FAILURE); }
+    if (!components->video_queue)    { g_printerr("Failed to create component: video_queue\n");    exit(EXIT_FAILURE); }
+    if (!components->video_identity) { g_printerr("Failed to create component: video_identity\n"); exit(EXIT_FAILURE); }
+    if (!components->video_parse)    { g_printerr("Failed to create component: video_parse\n");    exit(EXIT_FAILURE); }
+    if (!components->video_rate)     { g_printerr("Failed to create component: video_rate\n");     exit(EXIT_FAILURE); }
+    if (!components->audio_queue)    { g_printerr("Failed to create component: audio_queue\n");    exit(EXIT_FAILURE); }
+    if (!components->audio_identity) { g_printerr("Failed to create component: audio_identity\n"); exit(EXIT_FAILURE); }
+    if (!components->audio_parse)    { g_printerr("Failed to create component: audio_parse\n");    exit(EXIT_FAILURE); }
+    if (!components->whip_sink)      { g_printerr("Failed to create component: whip_sink\n");      exit(EXIT_FAILURE); }
+}
+
 int setup_pipeline(StreamComponents *components, char *filename) {
     // tear down the old pipeline
     g_clear_object(&components->pipeline);
@@ -123,21 +138,7 @@ int setup_pipeline(StreamComponents *components, char *filename) {
 
     components->pipeline = gst_pipeline_new("main-pipeline");
 
-    if (!components->pipeline       ||
-        !components->source         ||
-        !components->demux          ||
-        !components->video_queue    ||
-        !components->video_identity ||
-        !components->video_parse    ||
-        !components->video_rate     ||
-        !components->audio_queue    ||
-        !components->audio_identity ||
-        !components->audio_parse    ||
-        !components->whip_sink
-    ) {
-        g_printerr ("Not all elements could be created.\n");
-        return -1;
-    }
+    check_components(components);
 
     // build the pipeline
     gst_bin_add_many(
