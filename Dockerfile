@@ -45,7 +45,8 @@ libjansson-dev \
 # libasan8 \
 # && rm -rf /var/lib/apt/lists/*
 
-COPY ./libs /app/webrtchttp/
+# make this whatever folder contains the compiled binaries
+COPY ./libs/ /app/webrtchttp/
 COPY ./bin/ /app/bin/
 
 ENV GST_PLUGIN_PATH="/app/webrtchttp/"
